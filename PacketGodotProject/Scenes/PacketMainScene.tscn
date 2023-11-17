@@ -45,3 +45,8 @@ margin_right = 1400.0
 margin_bottom = 900.0
 size_flags_horizontal = 3
 color = Color( 0.188235, 0.188235, 0.188235, 1 )
+
+[node name="Checker" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Checker" to="." method="_on_Checker_timeout"]
