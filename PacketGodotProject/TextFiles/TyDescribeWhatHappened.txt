@@ -1,0 +1,17 @@
+Ok so this function, very simple
+
+FIRST -> Grab the dictionary which holds all the 
+information -> round_information or something like that
+
+SECOND -> From there, access the different pieces of information
+and determine whether it should be displayed. For example, either 
+Deny or Allow should be the false, and the other will contain information.
+If Allow contains information, further dissect that look at the 
+information accordingly
+   a] Always display whether they were correct in there choice (Valid choice : true / false)
+
+THIRD -> Calls the display_text function or whatever it 
+calls, and passes the text into there. Remember that it
+shouldn't be too long otherwise it won't fit in there. 
+Along with that, if you want to start a new line, put \n
+

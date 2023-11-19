@@ -1,0 +1,31 @@
+[///] Make a timer which
+	a] Checks if a round is occurring
+	b] starts a new round if one isn't occurring
+[///] Wait a few seconds after the results are outputted
+
+
+[] Make Scanning Packet take a few seconds
+>>> Make it obvious that it is scanning
+[] Ty's TCP/UDP 
+[] Ty's unpacking of the information and displaying it
+[] Packet creation
+[] Incorporating protocols
+[] Show points earned
+[] Determine how points are earned and lost
+[] Find ways to make it fun
+	a] Add more actions to do?
+	b] Focus more on TCP/UDP phase 
+		i] IDEA!!! UDP brings up russian roulette
+		or the dinosaur game. TCP brings up Real Time Action.
+			Only if enough time and speak to Ty first.  
+			RTS game would be selecting keys when they plop up
+			Russian Roulette would just be button mashing
+	c] Oooh a hashing minigame -> maybe packets are encrypted so a 
+	minigame pops up inorder to unencrypt it. Maybe dinosaur game? 
+	Like jumping hurdles. Simple to make. Adds more points if this
+	has to happen. Uhh another idea is idk. Ask Ty
+[] Add timeout for each round
+[] Disable buttons between rounds
+[] After a number of rounds, change the valid ip range (?)
+[] Figure out how long rounds should go for
+[] Do a proper end once the round takes too long

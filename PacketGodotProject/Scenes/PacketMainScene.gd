@@ -6,13 +6,19 @@ enum CPI_state {SENDER_IP, DESTINATION_IP, PROTOCOL, WORD}
 var rng = RandomNumberGenerator.new()
 
 var current_packet_info = []
-var CPI_word_array = ["Sender IP", "Destination IP", "Protocol", "Word"]
-#"Sender IP", "Destiantion IP", "Protocol", "Word" 
-#word is the keyword
 
+var is_a_round_happening = false
+
+#-------------------------------------------------
+
+var CPI_word_array = ["Sender IP", "Destination IP", "Protocol", "Word"]
+		#"Sender IP", "Destiantion IP", "Protocol", "Word" 
+		#word is the keyword
 var valid_ip_range = "100.10"
-#100.10, 100, 100.10.1, for example
+		#100.10, 100, 100.10.1, for example
 var num_valid_octets = 1
+
+#-------------------------------------------------
 
 const BASE_ROUND_INFO_DICT = {
 	"Valid IP" : "false", #was the packet valid or not?
@@ -31,26 +37,22 @@ var round_information_dict = {
 }
 
 #-------------------------------------------------
-#Protocols will be a later want in thing
-#GET TY TO CODE RELATED STUFF
+		#Protocols will be a later want in thing
+		#GET TY TO CODE RELATED STUFF
 
 var auto_invalid_protocols = []
-#list of invalid porotocal that must be denied
+		#list of invalid porotocal that must be denied
 
 var auto_valid_protocols = []
-#list of valid protocols that must be allowed
-#--------------------------------------------------
+		#list of valid protocols that must be allowed
+#-------------------------------------------------
 
 var keyword = "ookook"
-#list of random words
-
-
-func _ready():
-	packet_creator()
+		#list of random words
 
 
 
-#come back to later
+		#come back to later
 func packet_creator():
 	current_packet_info = []
 	
@@ -94,7 +96,7 @@ func packet_creator():
 
 
 func check_if_correct_valid_packet(allowed):
-	#first check sender ip, the destination ip
+			#first check sender ip, the destination ip
 	var is_valid = true
 	if (valid_ip_range in current_packet_info[CPI_state.SENDER_IP]) == false:
 		is_valid = false
@@ -105,17 +107,17 @@ func check_if_correct_valid_packet(allowed):
 	round_information_dict["Valid IP"] = is_valid
 	
 	
-	#false = false, good, true = true, good, 
+			#false = false, good, true = true, good, 
 	var correct_action = false
 	
 	if is_valid == allowed:
-		#means that either a good packet was accept or a bad one was denied
+				#means that either a good packet was accept or a bad one was denied
 		correct_action = true
 	else:
-		#means that either a good packet was denied or a bad one was accepted
+				#means that either a good packet was denied or a bad one was accepted
 		correct_action = false
 	
-	#this will earn the player some points (majority)
+			#this will earn the player some points (majority)
 	
 	round_information_dict["Correct choice"] = str(correct_action)
 	
@@ -158,9 +160,10 @@ func _on_Scan_pressed():
 
 
 func describe_what_happened():
-	#GET TY TO DO IT
-	#essentially breaking down the dict
+			#GET TY TO DO IT
+			#essentially breaking down the dict and putting in a readable form
 	change_packet_info_text(round_information_dict)
+	ending_round()
 
 
 func change_packet_info_text(text_to_display):
@@ -169,7 +172,51 @@ func change_packet_info_text(text_to_display):
 	get_node(packet_info_text_nodepath).text = str(text_to_display)
 
 func TCP_UDP_mode():
-	#write down later what ty needs to do
+			#write down later what ty needs to do
 	describe_what_happened()
 	
+	
+
+func _on_RoundCheck_timeout():
+	if is_a_round_happening == false:
+		round_starter()
+	
+func ending_round():
+			#waiting a few seconds for it to end
+	$ProgressUp.stop()
+	
+	var timer = Timer.new()
+	timer.set_wait_time(3)
+	timer.set_one_shot(true)
+	self.add_child(timer)
+	timer.start()
+	yield(timer, "timeout")
+	timer.queue_free()
+	
+	
+	is_a_round_happening = false
+			#GET SIR TO DO POINTS ADDY HERE
+
+func round_starter():
+			#first i needa get everything fresh and beautiful
+			#then create a packet
+			#uhhh dont think anything else agegagegagega
+	is_a_round_happening = true
+	current_packet_info = []
+	
+	change_packet_info_text("A new packet has arrived for you to check!")
+	
+	packet_creator()
+	$ProgressUp.start()
+	$CanvasLayer/Background/H/Right/CR/ProgressBar.value = 0
+	
+	
+
+
+func _on_ProgressUp_timeout():
+	$CanvasLayer/Background/H/Right/CR/ProgressBar.value += 1
+	
+	if $CanvasLayer/Background/H/Right/CR/ProgressBar.max_value == $CanvasLayer/Background/H/Right/CR/ProgressBar.value:
+		ending_round()
+		change_packet_info_text("Took too long. Packet was lost")
 	

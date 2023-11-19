@@ -319,8 +319,8 @@ margin_left = 21.0
 margin_top = 286.0
 margin_right = 310.0
 margin_bottom = 329.0
+max_value = 15.0
 step = 1.0
-value = 50.0
 
 [node name="Timer" type="Timer" parent="CanvasLayer/Background/H/Right/CR/ProgressBar"]
 wait_time = 30.0
@@ -336,6 +336,14 @@ custom_fonts/font = ExtResource( 2 )
 text = "Time left till auto deny"
 valign = 1
 
+[node name="RoundCheck" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="ProgressUp" type="Timer" parent="."]
+
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Allow" to="." method="_on_Allow_pressed"]
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Deny" to="." method="_on_Deny_pressed"]
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Scan" to="." method="_on_Scan_pressed"]
+[connection signal="timeout" from="RoundCheck" to="." method="_on_RoundCheck_timeout"]
+[connection signal="timeout" from="ProgressUp" to="." method="_on_ProgressUp_timeout"]

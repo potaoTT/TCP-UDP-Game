@@ -1,0 +1,25 @@
+Ok Ty, so here is the premis of the TCP UDP part of the game
+
+After a packet is accepted (which i have coded in), the TCP/UDP function will be called
+
+What this needs to do is
+FIRST -> It needs to make the terminal for TCP/UDP visible 
+(i'll do that. You look at it for future reference just in 
+case i need you to do something similar)
+
+SECOND -> Connect signals from the TCP / UDP buttons to the 
+PacketMainScene.gd script and create functions. Again I'll 
+do this, but for future reference what you'll want to do is 
+go to the node (ask me if you dont know what that is), select
+signals on the RIGHT PANEL, then click connect. I'll show you tmr
+
+This is what you need to code in
+
+THIRD -> In the UDP (yeet the baby) part, you need to 
+   a] Generate a random number (very easy. I have done that many
+	  times in the script and it is in godot documentation)
+   b] Base on this number, do an if statement on whether if it will
+	  succeed to send.
+   c] Go to the round_information_dict, and go to the Allies dict 
+	  within it, and change the details accordingly. 
+   d] At the end, call the described what happened function 
