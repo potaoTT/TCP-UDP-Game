@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Themes/TerminalText.tres" type="DynamicFont" id=1]
+
+[node name="Terminal" type="ColorRect"]
+margin_right = 351.0
+margin_bottom = 250.0
+color = Color( 0.235294, 0.235294, 0.235294, 1 )
+
+[node name="TBody" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 30.0
+margin_right = -10.0
+margin_bottom = -10.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="V" type="VBoxContainer" parent="TBody"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Button" type="Button" parent="TBody/V"]
+margin_right = 331.0
+margin_bottom = 17.0
+custom_colors/font_color_focus = Color( 0, 0.745098, 0.133333, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0, 0.745098, 0.133333, 1 )
+custom_colors/font_color_pressed = Color( 0.67451, 0.380392, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "> Just some placeholder text"
+flat = true
+align = 0
+icon_align = 1
+
+[node name="Button2" type="Button" parent="TBody/V"]
+margin_top = 21.0
+margin_right = 331.0
+margin_bottom = 38.0
+custom_colors/font_color_focus = Color( 0, 0.745098, 0.133333, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0, 0.745098, 0.133333, 1 )
+custom_colors/font_color_pressed = Color( 0.67451, 0.380392, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "> Just some placeholder text"
+flat = true
+align = 0
+icon_align = 1
+
+[node name="TTitle" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -175.0
+margin_bottom = -220.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="Text" type="Label" parent="TTitle"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+custom_fonts/font = ExtResource( 1 )
+text = "Actions Terminal"
+valign = 1
