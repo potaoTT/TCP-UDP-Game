@@ -9,6 +9,8 @@ var current_packet_info = []
 
 var is_a_round_happening = false
 
+var total_points_accumualted = 0
+
 #-------------------------------------------------
 
 var CPI_word_array = ["Sender IP", "Destination IP", "Protocol", "Word"]
@@ -104,7 +106,7 @@ func check_if_correct_valid_packet(allowed):
 	if (valid_ip_range in current_packet_info[CPI_state.DESTINATION_IP]) == false:
 		is_valid = false
 	
-	round_information_dict["Valid IP"] = is_valid
+	round_information_dict["Valid IP"] = str(is_valid)
 	
 	
 			#false = false, good, true = true, good, 
@@ -119,7 +121,8 @@ func check_if_correct_valid_packet(allowed):
 	
 			#this will earn the player some points (majority)
 	
-	round_information_dict["Correct choice"] = str(correct_action)
+	round_information_dict["Correct choice"] = (str(correct_action)).to_lower()
+	
 	
 	return correct_action
 	
@@ -127,7 +130,7 @@ func point_giver():
 	pass
 	
 func _on_Allow_pressed():
-	round_information_dict["Deny"] = false
+	round_information_dict["Deny"] = "false"
 	round_information_dict["Allow"] = BASE_ROUND_INFO_DICT["Allow"]
 	
 	var result = check_if_correct_valid_packet(true)
@@ -135,8 +138,8 @@ func _on_Allow_pressed():
 	TCP_UDP_mode()
 	
 func _on_Deny_pressed():
-	round_information_dict["Deny"] = true
-	round_information_dict["Allow"] = false
+	round_information_dict["Deny"] = "true"
+	round_information_dict["Allow"] = "false"
 	
 	var result = check_if_correct_valid_packet(false)
 	describe_what_happened()
@@ -144,6 +147,41 @@ func _on_Deny_pressed():
 
 func _on_Scan_pressed():
 	
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.text = "> Scanning..."
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.disabled = true
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.disabled = true
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.disabled = true
+	
+	
+	
+	var timer = Timer.new()
+	timer.set_wait_time(1)
+	timer.set_one_shot(true)
+	self.add_child(timer)
+	timer.start()
+	yield(timer, "timeout")
+	
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.text = "> Scanning..."
+	timer.start()
+	yield(timer, "timeout")
+	
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.text = "> Scanning..."
+	timer.start()
+	yield(timer, "timeout")
+	
+	timer.start()
+	yield(timer, "timeout")
+	
+	timer.queue_free()
+	
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.text = "> Scan Packet"
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.text = "> Deny Packet"
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.text = "> Allow Packet"
+	
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.disabled = false
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.disabled = false
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.disabled = false
+
 	
 	var text_to_display = ""
 	for constant in CPI_state:
@@ -195,7 +233,12 @@ func ending_round():
 	
 	
 	is_a_round_happening = false
+	var points_earned = point_calculations()
+	$CanvasLayer/Background/H/Left/Info/TBody/Text.text = "> Points earned : " + str(points_earned) + "\n"
+	$CanvasLayer/Background/H/Left/Info/TBody/Text.text += "> Total points earned : " + str(total_points_accumualted)
 			#GET SIR TO DO POINTS ADDY HERE
+
+
 
 func round_starter():
 			#first i needa get everything fresh and beautiful
@@ -210,8 +253,6 @@ func round_starter():
 	$ProgressUp.start()
 	$CanvasLayer/Background/H/Right/CR/ProgressBar.value = 0
 	
-	
-
 
 func _on_ProgressUp_timeout():
 	$CanvasLayer/Background/H/Right/CR/ProgressBar.value += 1
@@ -220,3 +261,53 @@ func _on_ProgressUp_timeout():
 		ending_round()
 		change_packet_info_text("Took too long. Packet was lost")
 	
+
+func point_calculations():
+			#first check if it was successfully sent
+			#True
+				#Was is the correct choice?
+				#true
+					#1 point earned!
+				#false
+					#1 point lost!
+				#Was it sent with UDP or TCP?
+				#TCP
+					#multiple points by 5 (+/-5)
+				#UDP
+					#multiple points by 1 (+/-1)
+					
+#	round_information_dict = {
+#	"Valid IP" : "", #was the packet valid or not?
+#	"Deny" : "false", #did you deny it or not
+#	"Allow" : {"TCP or UDP" : "UDP", #was it udp or tcp
+#				"Successfully sent" : "false"}, #did it successfully send
+#	"Correct choice" : "false"
+#}
+	var points = 0
+	var rid = round_information_dict
+	print(rid)
+	
+	if rid["Correct choice"] == "false":
+		print("Bad choice")
+		points = -1
+	else:
+		points = 1
+		if rid["Deny"] == "true":
+			print("denied")
+			points = 2
+		else:
+			#this would be UDP unless later elif
+			if rid["Allow"]["Successfully sent"] == "false":
+				points = 1
+			if rid["Allow"]["TCP or UDP"] == "TCP" and rid["Allow"]["Successfully sent"] == "true":
+				points = 5
+			#only if minigame exists or time out
+			elif rid["Allow"]["TCP or UDP"] == "TCP" and rid["Allow"]["Successfully sent"] == "false":
+				points = 2
+	
+	print("points")
+
+	total_points_accumualted += points
+	
+	print(points)
+	return points
