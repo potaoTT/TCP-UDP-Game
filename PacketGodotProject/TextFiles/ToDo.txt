@@ -12,6 +12,11 @@
 [] Ty's unpacking of the information and displaying it
 [] Proper Packet creation
 
+[] Make a dictionary which contains the various texts that texts should hold
+[] There's an issue where if the timer runs out before the packet is sent, double points
+		Might be a good idea to pause the progress bar then figure out from there
+
+
 [] Incorporating protocols
 [] Make buttons disabled between rounds
 

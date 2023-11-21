@@ -52,7 +52,9 @@ var auto_valid_protocols = []
 var keyword = "ookook"
 		#list of random words
 
+#-------------------------------------------------
 
+signal TCP_UDP_end 
 
 		#come back to later
 func packet_creator():
@@ -211,9 +213,59 @@ func change_packet_info_text(text_to_display):
 
 func TCP_UDP_mode():
 			#write down later what ty needs to do
+			#actually i'll do this cause it'd be hard for Ty
+	$CanvasLayer/Background/H/Middle/TCPUDP.visible = true
+	
+	yield(self, "TCP_UDP_end")
+	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/TCP.visible = true
+	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/UDP.visible = true
+	
 	describe_what_happened()
 	
 	
+
+func _on_TCP_pressed(): #take care of the baby
+	$ProgressUp.stop()
+	round_information_dict["Allow"]["TCP or UDP"] = "TCP"
+	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/TCP.visible = false
+	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/UDP.visible = false
+	
+			#FUNCTION FLESH
+	var text_to_display = [
+		"> Sending the packet...", " Successfully sent! \n",
+		"> Unpacking the packet...", " Successfully unpacked! \n"
+	]
+	
+	for text in text_to_display:
+		
+		
+		var random_wait = rng.randi_range(1, 3)
+		if text != text_to_display[0] or text != text_to_display[2]:
+			random_wait = 1
+			$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/Text.text += text
+		
+		var timer = Timer.new()
+		timer.set_wait_time(random_wait)
+		timer.set_one_shot(true)
+		self.add_child(timer)
+		timer.start()
+		yield(timer, "timeout")
+		timer.queue_free()
+		
+		
+	round_information_dict["Allow"]["Successfully sent"] = "true"
+	emit_signal("TCP_UDP_end")
+	
+	
+func _on_UDP_pressed(): #yeet the baby
+	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/TCP.visible = false
+	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/UDP.visible = false
+	round_information_dict["Allow"]["TCP or UDP"] = "UDP"
+	
+			#FUNCTION FLESH
+	
+	emit_signal("TCP_UDP_end")
+
 
 func _on_RoundCheck_timeout():
 	if is_a_round_happening == false:
@@ -244,6 +296,10 @@ func round_starter():
 			#first i needa get everything fresh and beautiful
 			#then create a packet
 			#uhhh dont think anything else agegagegagega
+	$CanvasLayer/Background/H/Middle/TCPUDP.visible = false
+	
+	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/Text.text = "some random text about TCP and UDP"
+	
 	is_a_round_happening = true
 	current_packet_info = []
 	
@@ -311,3 +367,5 @@ func point_calculations():
 	
 	print(points)
 	return points
+
+

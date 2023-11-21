@@ -190,7 +190,7 @@ color = Color( 0, 0, 0, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Text2" type="Label" parent="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V"]
+[node name="Text" type="Label" parent="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V"]
 margin_right = 331.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 2 )
@@ -198,7 +198,7 @@ text = "I am explaining the risks of TCP and UDP as they have many risks and rew
 valign = 1
 autowrap = true
 
-[node name="Button" type="Button" parent="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V"]
+[node name="TCP" type="Button" parent="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V"]
 margin_top = 29.0
 margin_right = 331.0
 margin_bottom = 46.0
@@ -207,12 +207,12 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0, 0.745098, 0.133333, 1 )
 custom_colors/font_color_pressed = Color( 0.67451, 0.380392, 0, 1 )
 custom_fonts/font = ExtResource( 2 )
-text = "> Just some placeholder text"
+text = "> Use TCP to send"
 flat = true
 align = 0
 icon_align = 1
 
-[node name="Button2" type="Button" parent="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V"]
+[node name="UDP" type="Button" parent="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V"]
 margin_top = 50.0
 margin_right = 331.0
 margin_bottom = 67.0
@@ -221,7 +221,7 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0, 0.745098, 0.133333, 1 )
 custom_colors/font_color_pressed = Color( 0.67451, 0.380392, 0, 1 )
 custom_fonts/font = ExtResource( 2 )
-text = "> Just some placeholder text"
+text = "> Use UDP to send"
 flat = true
 align = 0
 icon_align = 1
@@ -348,5 +348,7 @@ autostart = true
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Allow" to="." method="_on_Allow_pressed"]
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Deny" to="." method="_on_Deny_pressed"]
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Scan" to="." method="_on_Scan_pressed"]
+[connection signal="pressed" from="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/TCP" to="." method="_on_TCP_pressed"]
+[connection signal="pressed" from="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/UDP" to="." method="_on_UDP_pressed"]
 [connection signal="timeout" from="RoundCheck" to="." method="_on_RoundCheck_timeout"]
 [connection signal="timeout" from="ProgressUp" to="." method="_on_ProgressUp_timeout"]
