@@ -357,9 +357,9 @@ func point_calculations():
 	print(rid)
 	
 	if rid["Correct choice"] == "false":
-		points = -0.5
+		points = -1
 	else:
-		points = 0.5
+		points = 1
 		
 	if rid["Deny"] == "true":
 		points *= 2
