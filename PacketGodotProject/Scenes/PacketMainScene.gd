@@ -257,12 +257,21 @@ func _on_TCP_pressed(): #take care of the baby
 	emit_signal("TCP_UDP_end")
 	
 	
+	
+	
 func _on_UDP_pressed(): #yeet the baby
 	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/TCP.visible = false
 	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/UDP.visible = false
 	round_information_dict["Allow"]["TCP or UDP"] = "UDP"
 	
 			#FUNCTION FLESH
+	var did_it_send = rng.randi_range(1,6)
+	
+	if did_it_send == 3:
+		round_information_dict["Allow"]["Successfully sent"] = "true"
+	else:
+		round_information_dict["Allow"]["Successfully sent"] = "false"
+	
 	
 	emit_signal("TCP_UDP_end")
 
@@ -339,27 +348,29 @@ func point_calculations():
 #				"Successfully sent" : "false"}, #did it successfully send
 #	"Correct choice" : "false"
 #}
+
+			#Valid IP true/false -> 0.5
+			#Denied -> 1
+			#Allow | SS False -> 0 | SS True TCP -> 3 | SS True UDP -> 1
 	var points = 0
 	var rid = round_information_dict
 	print(rid)
 	
 	if rid["Correct choice"] == "false":
-		print("Bad choice")
-		points = -1
+		points = -0.5
 	else:
-		points = 1
-		if rid["Deny"] == "true":
-			print("denied")
-			points = 2
+		points = 0.5
+		
+	if rid["Deny"] == "true":
+		points *= 2
+	else: #allow
+		if rid["Allow"]["Successfully sent"] == "false":
+			points = 0
 		else:
-			#this would be UDP unless later elif
-			if rid["Allow"]["Successfully sent"] == "false":
-				points = 1
-			if rid["Allow"]["TCP or UDP"] == "TCP" and rid["Allow"]["Successfully sent"] == "true":
-				points = 5
-			#only if minigame exists or time out
-			elif rid["Allow"]["TCP or UDP"] == "TCP" and rid["Allow"]["Successfully sent"] == "false":
-				points = 2
+			if rid["Allow"]["TCP or UDP"] == "TCP":
+				points *= 3
+			else:
+				points *= 1
 	
 	print("points")
 
