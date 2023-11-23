@@ -202,7 +202,39 @@ func _on_Scan_pressed():
 func describe_what_happened():
 			#GET TY TO DO IT
 			#essentially breaking down the dict and putting in a readable form
-	change_packet_info_text(round_information_dict)
+			#	round_information_dict = { "Valid IP" : "", #was the packet valid or not?
+#	"Deny" : "false", #did you deny it or not
+#	"Allow" : {"TCP or UDP" : "UDP", #was it udp or tcp
+#				"Successfully sent" : "false"}, #did it successfully send
+#	"Correct choice" : "false"
+#}
+	
+	var valid_ip = round_information_dict["Valid IP"]
+	var deny = round_information_dict["Deny"]
+	var allow = round_information_dict["Allow"]
+	var correct = round_information_dict["Correct choice"]
+	var what_text = ""
+	
+	print(valid_ip)
+	if str(valid_ip).to_lower() == "true":
+		what_text += "This was a Valid packet\n"
+	else:
+		what_text += "This was an Invalid packet\n"
+	if deny == "true":
+		what_text += "You denied this packet\n"
+	else:
+		what_text += "You allowed this packet\n"
+		var TCP_UDP = round_information_dict["Allow"]["TCP or UDP"]
+		var successfullysent = round_information_dict["Allow"]["Successfully sent"]
+		if TCP_UDP == "TCP":
+			what_text += "You used TCP\n"
+		else:
+			what_text += "You used UDP\n"
+	if correct == "true":
+		what_text += "This was the correct choice"
+	else:
+		what_text += "This was the wrong choice"
+	change_packet_info_text(what_text)
 	ending_round()
 
 
