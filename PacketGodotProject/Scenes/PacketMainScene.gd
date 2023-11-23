@@ -1,6 +1,11 @@
 extends Node2D
 
-
+func text(ARRAY):
+	#ARRAY = ["idk", "bitch", "help"]
+	for string in ARRAY:
+		var text_displayed = ">" + str(string) + "\n"
+		$CanvasLayer/HBoxContainer/VBoxContainer/Status/TextEdit.text += text_displayed
+		
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -8,7 +13,8 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	var ARRAY = ["heyo", "I will kill you", "GOD HELP US"]
+	text(ARRAY)
 
 
 <<<<<<< Updated upstream
