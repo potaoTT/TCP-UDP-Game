@@ -6,11 +6,11 @@
 >>> Make it obvious that it is scanning
 [///] Show points earned
 [///] Determine how points are earned and lost
+[///] Ty's TCP/UDP 
+[///] Ty's unpacking of the information and displaying it
 
-
-[] Ty's TCP/UDP 
-[] Ty's unpacking of the information and displaying it
 [] Proper Packet creation
+[] Change packets chances and rng
 
 [] Make a dictionary which contains the various texts that texts should hold
 [] There's an issue where if the timer runs out before the packet is sent, double points

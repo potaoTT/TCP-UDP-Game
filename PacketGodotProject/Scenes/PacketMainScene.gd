@@ -56,7 +56,7 @@ var keyword = "ookook"
 
 signal TCP_UDP_end 
 
-		#come back to later
+
 func packet_creator():
 	current_packet_info = []
 	
