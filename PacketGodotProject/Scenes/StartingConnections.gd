@@ -51,8 +51,18 @@ func _on_data() -> void:
 	
 	match splitted_incomming[0]:
 		"YOU ARE BEING DOS ATTACKED":
+			#pause the canvas layer 
+			#create timer
+			#yeild until time out
+			#unpause the canvas layer
 			pass
 		"hacker": #hacker:IP
+			#psuedocode as will do later
+			#end current round 
+			#wait 2 seconds
+			#time out the current timer
+			#create the packet but with the procol being a hacker
+			#deny the packet kicks the person off
 			pass
 		
 	
