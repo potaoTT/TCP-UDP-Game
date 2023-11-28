@@ -48,6 +48,7 @@ func _on_data() -> void:
 	var splitted_incomming = incoming.split(":")
 	
 	
+	
 	match splitted_incomming[0]:
 		"YOU ARE BEING DOS ATTACKED":
 			pass

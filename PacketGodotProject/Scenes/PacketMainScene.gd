@@ -148,7 +148,7 @@ func _on_Deny_pressed():
 	
 
 func _on_Scan_pressed():
-	
+	$ProgressUp.stop()
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.text = "> Scanning..."
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.disabled = true
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.disabled = true
@@ -183,6 +183,7 @@ func _on_Scan_pressed():
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.disabled = false
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.disabled = false
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.disabled = false
+	$ProgressUp.start()
 
 	
 	var text_to_display = ""
@@ -316,6 +317,23 @@ func ending_round():
 			#waiting a few seconds for it to end
 	$ProgressUp.stop()
 	
+	
+	
+	
+	is_a_round_happening = false
+	var points_earned = point_calculations()
+	$CanvasLayer/Background/H/Left/Info/TBody/Text.text = "> Points earned : " + str(points_earned) + "\n"
+	$CanvasLayer/Background/H/Left/Info/TBody/Text.text += "> Total points earned : " + str(total_points_accumualted)
+	$CanvasLayer/Background/H/Middle/TCPUDP.visible = false
+	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/Text.text = "some random text about TCP and UDP"
+			
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.disabled = true
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.disabled = true
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.disabled = true
+			#GET SIR TO DO POINTS ADDY HERE
+	
+	$StartingConnections._sending_points(points_earned)
+	
 	var timer = Timer.new()
 	timer.set_wait_time(3)
 	timer.set_one_shot(true)
@@ -323,14 +341,6 @@ func ending_round():
 	timer.start()
 	yield(timer, "timeout")
 	timer.queue_free()
-	
-	
-	is_a_round_happening = false
-	var points_earned = point_calculations()
-	$CanvasLayer/Background/H/Left/Info/TBody/Text.text = "> Points earned : " + str(points_earned) + "\n"
-	$CanvasLayer/Background/H/Left/Info/TBody/Text.text += "> Total points earned : " + str(total_points_accumualted)
-			#GET SIR TO DO POINTS ADDY HERE
-
 
 
 func round_starter():
@@ -340,6 +350,10 @@ func round_starter():
 	$CanvasLayer/Background/H/Middle/TCPUDP.visible = false
 	
 	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/Text.text = "some random text about TCP and UDP"
+	
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.disabled = false
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.disabled = false
+	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.disabled = false
 	
 	is_a_round_happening = true
 	current_packet_info = []
@@ -400,7 +414,7 @@ func point_calculations():
 			points = 0
 		else:
 			if rid["Allow"]["TCP or UDP"] == "TCP":
-				points *= 3
+				points *= 2
 			else:
 				points *= 1
 	
