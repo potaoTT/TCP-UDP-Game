@@ -51,12 +51,14 @@ func _on_data() -> void:
 	
 	match splitted_incomming[0]:
 		"YOU ARE BEING DOS ATTACKED":
-			#pause the canvas layer 
-			#create timer
-			#yeild until time out
-			#unpause the canvas layer
-			pass
+			#create timer child with pause mode process
+			#pause the child
+			#attach script to child
+			#on self timeout, 
+			get_parent().get_node("DOSChild").start()
+			get_parent().paused = true
 		"hacker": #hacker:IP
+			#DO AS VERY LAST THING
 			#psuedocode as will do later
 			#end current round 
 			#wait 2 seconds
@@ -75,6 +77,7 @@ func _sending_points(points):
 	
 	var packet: PoolByteArray = message.to_utf8()
 	client.get_peer(1).put_packet(packet)
+
 
 func _yeeting_someone(hacker_ip):
 	var message = "yeet:%s" % hacker_ip

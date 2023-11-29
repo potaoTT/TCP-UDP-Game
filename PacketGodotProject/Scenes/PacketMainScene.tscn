@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/PacketMainScene.gd" type="Script" id=1]
 [ext_resource path="res://Themes/TerminalText.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/StartingConnections.gd" type="Script" id=3]
+[ext_resource path="res://Scenes/DOSChild.gd" type="Script" id=4]
 
 [node name="PacketMainScene" type="Node2D"]
 script = ExtResource( 1 )
@@ -327,7 +328,7 @@ margin_left = 21.0
 margin_top = 286.0
 margin_right = 310.0
 margin_bottom = 329.0
-max_value = 15.0
+max_value = 10.0
 step = 1.0
 
 [node name="Timer" type="Timer" parent="CanvasLayer/Background/H/Right/CR/ProgressBar"]
@@ -353,6 +354,12 @@ autostart = true
 [node name="StartingConnections" type="Node" parent="."]
 script = ExtResource( 3 )
 
+[node name="DOSChild" type="Timer" parent="."]
+pause_mode = 2
+wait_time = 10.0
+one_shot = true
+script = ExtResource( 4 )
+
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Allow" to="." method="_on_Allow_pressed"]
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Deny" to="." method="_on_Deny_pressed"]
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Scan" to="." method="_on_Scan_pressed"]
@@ -360,3 +367,4 @@ script = ExtResource( 3 )
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/UDP" to="." method="_on_UDP_pressed"]
 [connection signal="timeout" from="RoundCheck" to="." method="_on_RoundCheck_timeout"]
 [connection signal="timeout" from="ProgressUp" to="." method="_on_ProgressUp_timeout"]
+[connection signal="timeout" from="DOSChild" to="DOSChild" method="_on_DOSChild_timeout"]

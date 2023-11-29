@@ -27,7 +27,8 @@ const BASE_ROUND_INFO_DICT = {
 	"Deny" : "false", #did you deny it or not
 	"Allow" : {"TCP or UDP" : "UDP", #was it udp or tcp
 				"Successfully sent" : "false"}, #did it successfully send
-	"Correct choice" : "false"
+	"Correct choice" : "false",
+	"Scanned" : "false",
 }
 
 var round_information_dict = {
@@ -35,12 +36,19 @@ var round_information_dict = {
 	"Deny" : "false", #did you deny it or not
 	"Allow" : {"TCP or UDP" : "UDP", #was it udp or tcp
 				"Successfully sent" : "false"}, #did it successfully send
-	"Correct choice" : "false"
+	"Correct choice" : "false",
+	"Scanned" : "false",
 }
 
 #-------------------------------------------------
 		#Protocols will be a later want in thing
 		#GET TY TO CODE RELATED STUFF
+var protocols = [
+	"SMTP",
+	"ICMP",
+	"FTP",
+	"HTTPS",
+	"DHCP"]
 
 var auto_invalid_protocols = []
 		#list of invalid porotocal that must be denied
@@ -49,6 +57,7 @@ var auto_valid_protocols = []
 		#list of valid protocols that must be allowed
 #-------------------------------------------------
 
+#do code for this later
 var keyword = "ookook"
 		#list of random words
 
@@ -94,10 +103,29 @@ func packet_creator():
 		
 	print(len(current_packet_info))
 	
-	current_packet_info.append("Protocol")
+	
+	var max_num = len(protocols) - 1
+	
+	var rng_for_protocol = rng.randi_range(0, max_num)
+	current_packet_info.append(protocols[rng_for_protocol])
 	current_packet_info.append(keyword)
 	print(current_packet_info)
 
+func hacker_is_in(hacker_ip):
+	ending_round(true)
+	is_a_round_happening = true
+	round_starter(true)
+	hacker_packet(hacker_ip)
+	
+
+func hacker_packet(hacker_ip):
+	current_packet_info = [""]
+	current_packet_info.append(str(hacker_ip))
+	
+	current_packet_info.append(str("Your IP"))
+	
+	current_packet_info.append("Hacked")
+	current_packet_info.append(keyword)
 
 func check_if_correct_valid_packet(allowed):
 			#first check sender ip, the destination ip
@@ -154,7 +182,7 @@ func _on_Scan_pressed():
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.disabled = true
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.disabled = true
 	
-	
+	round_information_dict["Scanned"] = "true"
 	
 	var timer = Timer.new()
 	timer.set_wait_time(1)
@@ -231,6 +259,10 @@ func describe_what_happened():
 			what_text += "You used TCP\n"
 		else:
 			what_text += "You used UDP\n"
+			if successfullysent == "false":
+				what_text += "But it was unsuccessfully sent"
+			else:
+				what_text += "And it was successfully sent"
 	if correct == "true":
 		what_text += "This was the correct choice"
 	else:
@@ -313,20 +345,24 @@ func _on_RoundCheck_timeout():
 	if is_a_round_happening == false:
 		round_starter()
 	
-func ending_round():
+func ending_round(hacker=false):
 			#waiting a few seconds for it to end
 	$ProgressUp.stop()
 	
 	
 	
 	
-	is_a_round_happening = false
+	
 	var points_earned = point_calculations()
 	$CanvasLayer/Background/H/Left/Info/TBody/Text.text = "> Points earned : " + str(points_earned) + "\n"
 	$CanvasLayer/Background/H/Left/Info/TBody/Text.text += "> Total points earned : " + str(total_points_accumualted)
 	$CanvasLayer/Background/H/Middle/TCPUDP.visible = false
 	$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/Text.text = "some random text about TCP and UDP"
 			
+	
+	if hacker == true:
+		_on_ProgressUp_timeout()
+	
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.disabled = true
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Deny.disabled = true
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Scan.disabled = true
@@ -335,15 +371,17 @@ func ending_round():
 	$StartingConnections._sending_points(points_earned)
 	
 	var timer = Timer.new()
-	timer.set_wait_time(3)
+	timer.set_wait_time(5)
 	timer.set_one_shot(true)
 	self.add_child(timer)
 	timer.start()
 	yield(timer, "timeout")
 	timer.queue_free()
+	is_a_round_happening = false
+	
 
 
-func round_starter():
+func round_starter(hacker=false):
 			#first i needa get everything fresh and beautiful
 			#then create a packet
 			#uhhh dont think anything else agegagegagega
@@ -360,8 +398,9 @@ func round_starter():
 	
 	change_packet_info_text("A new packet has arrived for you to check!")
 	
-	packet_creator()
-	$ProgressUp.start()
+	if hacker == false:
+		packet_creator()
+		$ProgressUp.start()
 	$CanvasLayer/Background/H/Right/CR/ProgressBar.value = 0
 	
 
@@ -417,6 +456,7 @@ func point_calculations():
 				points *= 2
 			else:
 				points *= 1
+	
 	
 	print("points")
 
