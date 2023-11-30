@@ -8,19 +8,61 @@ var URL: String = "ws://localhost:%s" % PORT
 
 var server_id
 
+
+var settings_file = "res://client_settings.txt"
+
+var user
+var team
+var addr
+var port
+var head
+var role
+var terminal = 'game'
+
+var settings = {}
+
+func _extract_from_client_settings():
+	var file = File.new()
+	file.open(settings_file, File.READ)
+	
+	
+	while not file.eof_reached():
+		
+		var split = (file.get_line().split(":"))
+		print("extracting..." + str(split))
+		settings[split[0]] = split[-1]
+		
+		match split[0]:
+			"user":
+				user = split[1]
+			"team":
+				team = split[1]
+			"role":
+				role = split[1]
+			"addr":
+				addr = split[1]
+	file.close()
+
 func _ready() -> void:
+	print("started")
+	_extract_from_client_settings()
 	print("connecty testy")
-	client.connect_to_url(URL)
+	
 	client.connect("connection_closed", self, "_closed")
 	client.connect("connection_error", self, "_closed")
 	client.connect("connection_established", self, "_connected")
 	client.connect("data_received", self, "_on_data")
 	print("we no likey testy")
 	
-		#come back to later
+	var err = client.connect_to_url(URL)
 	
-	#add connection 
-
+	if err != OK:
+		print("Unable to connect")
+		set_process(false)
+	else:
+		print("Okay!")
+	
+	
 func _closed():
 	print("closed")
 
@@ -28,8 +70,8 @@ func _closed():
 #this creates more risky code
 #the void returns a void if the protocol isnt a string
 func _connected(protocol: String) -> void:
-	print("no connecty")
-	var message = ""
+	print("connecty")
+	var message = ("join:" + user + "|" + team + "|" + role + "|" + terminal + "|" + head)
 	
 	#first creating the packet as utf
 	#sends it off

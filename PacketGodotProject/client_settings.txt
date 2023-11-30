@@ -1,0 +1,6 @@
+addr:10.10.10.10
+port:9876
+user:STOPIMPERSONATING
+team:orange
+role:tcp_udp
+head:10

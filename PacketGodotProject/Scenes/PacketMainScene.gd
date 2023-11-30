@@ -67,6 +67,7 @@ var keyword = "ookook"
 signal TCP_UDP_end 
 
 func _ready():
+	print("start")
 	start_round()
 	$CanvasLayer/ALERT.visible = true
 	$CanvasLayer/ALERT/textbcknd/Label.text = "WAITING FOR A NEW PACKET..."
