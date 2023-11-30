@@ -4,19 +4,19 @@ extends Node
 const PORT : int = 9876
 
 var client = WebSocketClient.new()
-var URL: String = "ws://localhost:%s" % PORT
+var URL: String = "ws://127.0.0.1:%s" % PORT
 
 var server_id
 
 
 var settings_file = "res://client_settings.txt"
 
-var user
-var team
-var addr
-var port
-var head
-var role
+var user = ""
+var team = ""
+var addr = ""
+var port = ""
+var head = ""
+var role = ""
 var terminal = 'game'
 
 var settings = {}
@@ -41,6 +41,8 @@ func _extract_from_client_settings():
 				role = split[1]
 			"addr":
 				addr = split[1]
+			"head":
+				head = split[1]
 	file.close()
 
 func _ready() -> void:
