@@ -29,7 +29,7 @@ func _closed():
 #the void returns a void if the protocol isnt a string
 func _connected(protocol: String) -> void:
 	print("no connecty")
-	var message = "||:GodotKid"
+	var message = ""
 	
 	#first creating the packet as utf
 	#sends it off
@@ -56,6 +56,8 @@ func _on_data() -> void:
 			#attach script to child
 			#on self timeout, 
 			get_parent().get_node("DOSChild").start()
+			get_parent().get_node("CanvasLayer/ALERT").visible = true
+			get_parent().get_node("CanvasLayer/ALERT/textbcknd/Label").text = "YOU GOT DOSSED! YOU WON'T BE ABLE TO PLAY FOR 10 SECONDS"
 			get_parent().paused = true
 		"hacker": #hacker:IP
 			#DO AS VERY LAST THING

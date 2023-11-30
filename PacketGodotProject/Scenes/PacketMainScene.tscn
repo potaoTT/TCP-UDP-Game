@@ -1,9 +1,14 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/PacketMainScene.gd" type="Script" id=1]
 [ext_resource path="res://Themes/TerminalText.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/StartingConnections.gd" type="Script" id=3]
 [ext_resource path="res://Scenes/DOSChild.gd" type="Script" id=4]
+[ext_resource path="res://Fonts/EHSMB.TTF" type="DynamicFontData" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 40
+font_data = ExtResource( 5 )
 
 [node name="PacketMainScene" type="Node2D"]
 script = ExtResource( 1 )
@@ -345,9 +350,31 @@ custom_fonts/font = ExtResource( 2 )
 text = "Time left till auto deny"
 valign = 1
 
+[node name="ALERT" type="ColorRect" parent="CanvasLayer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.858824, 0.709804, 0.709804, 0.27451 )
+
+[node name="textbcknd" type="ColorRect" parent="CanvasLayer/ALERT"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -208.0
+margin_right = 207.0
+color = Color( 0, 0, 0, 0.0392157 )
+
+[node name="Label" type="Label" parent="CanvasLayer/ALERT/textbcknd"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )
+text = "SOME REALLY LONG STRING OF TEXT"
+align = 1
+valign = 1
+autowrap = true
+
 [node name="RoundCheck" type="Timer" parent="."]
-wait_time = 5.0
-autostart = true
+wait_time = 4.0
 
 [node name="ProgressUp" type="Timer" parent="."]
 

@@ -29,6 +29,7 @@ const BASE_ROUND_INFO_DICT = {
 				"Successfully sent" : "false"}, #did it successfully send
 	"Correct choice" : "false",
 	"Scanned" : "false",
+	"Lost" : "false"
 }
 
 var round_information_dict = {
@@ -38,7 +39,7 @@ var round_information_dict = {
 				"Successfully sent" : "false"}, #did it successfully send
 	"Correct choice" : "false",
 	"Scanned" : "false",
-}
+	"Lost" : "false"}
 
 #-------------------------------------------------
 		#Protocols will be a later want in thing
@@ -65,20 +66,33 @@ var keyword = "ookook"
 
 signal TCP_UDP_end 
 
+func _ready():
+	start_round()
+	$CanvasLayer/ALERT.visible = true
+	$CanvasLayer/ALERT/textbcknd/Label.text = "WAITING FOR A NEW PACKET..."
+
+func start_round():
+	$RoundCheck.start(1)
+	$RoundCheck.wait_time = 5
+	#code to check if server is online
+	is_a_round_happening = false
+
 
 func packet_creator():
 	current_packet_info = []
-	
 	
 	
 	while len(current_packet_info) != 2:
 		var valid_ip_rng = rng.randi_range(1, 100)
 		
 		var ip_starter = null
-		if valid_ip_rng <= 90:
+		if valid_ip_rng <= 65:
 			ip_starter = valid_ip_range
 		else:
-			ip_starter = "101.10"
+			var ip_first = rng.randi_range(120,255)
+			var ip_second = rng.randi_range(1,255)
+			ip_starter = str(ip_first) + "." + str(ip_second)
+	
 			
 		var valid_end = "false"
 		
@@ -184,8 +198,10 @@ func _on_Scan_pressed():
 	
 	round_information_dict["Scanned"] = "true"
 	
+	var random_wait = rng.randf_range(0.8,2.2)
 	var timer = Timer.new()
-	timer.set_wait_time(1)
+	timer.set_wait_time(random_wait)
+	print(random_wait)
 	timer.set_one_shot(true)
 	self.add_child(timer)
 	timer.start()
@@ -195,9 +211,17 @@ func _on_Scan_pressed():
 	timer.start()
 	yield(timer, "timeout")
 	
+	random_wait = rng.randf_range(0.8,2.2)
+	print(random_wait)
+	timer.set_wait_time(random_wait)
+	
 	$CanvasLayer/Background/H/Middle/Action/TBody/V/Allow.text = "> Scanning..."
 	timer.start()
 	yield(timer, "timeout")
+	
+	random_wait = rng.randf_range(0.8,2.2)
+	print(random_wait)
+	timer.set_wait_time(random_wait)
 	
 	timer.start()
 	yield(timer, "timeout")
@@ -229,19 +253,11 @@ func _on_Scan_pressed():
 
 
 func describe_what_happened():
-			#GET TY TO DO IT
-			#essentially breaking down the dict and putting in a readable form
-			#	round_information_dict = { "Valid IP" : "", #was the packet valid or not?
-#	"Deny" : "false", #did you deny it or not
-#	"Allow" : {"TCP or UDP" : "UDP", #was it udp or tcp
-#				"Successfully sent" : "false"}, #did it successfully send
-#	"Correct choice" : "false"
-#}
-	
 	var valid_ip = round_information_dict["Valid IP"]
 	var deny = round_information_dict["Deny"]
 	var allow = round_information_dict["Allow"]
 	var correct = round_information_dict["Correct choice"]
+	var scanned = round_information_dict["Scanned"]
 	var what_text = ""
 	
 	print(valid_ip)
@@ -249,6 +265,12 @@ func describe_what_happened():
 		what_text += "This was a Valid packet\n"
 	else:
 		what_text += "This was an Invalid packet\n"
+	
+	if scanned == "true":
+		what_text += "You scanned the packet\n"
+	else:
+		what_text += "You didn't scan the packet\n"
+		
 	if deny == "true":
 		what_text += "You denied this packet\n"
 	else:
@@ -297,16 +319,16 @@ func _on_TCP_pressed(): #take care of the baby
 	
 			#FUNCTION FLESH
 	var text_to_display = [
-		"> Sending the packet...", " Successfully sent! \n",
+		"\n> Sending the packet...", " Successfully sent! \n",
 		"> Unpacking the packet...", " Successfully unpacked! \n"
 	]
 	
 	for text in text_to_display:
 		
 		
-		var random_wait = rng.randi_range(1, 3)
+		var random_wait = rng.randf_range(0.75,1.5)
+		print(random_wait)
 		if text != text_to_display[0] or text != text_to_display[2]:
-			random_wait = 1
 			$CanvasLayer/Background/H/Middle/TCPUDP/TBody/V/Text.text += text
 		
 		var timer = Timer.new()
@@ -343,7 +365,9 @@ func _on_UDP_pressed(): #yeet the baby
 
 func _on_RoundCheck_timeout():
 	if is_a_round_happening == false:
+		$CanvasLayer/ALERT.visible = false
 		round_starter()
+		
 	
 func ending_round(hacker=false):
 			#waiting a few seconds for it to end
@@ -354,6 +378,9 @@ func ending_round(hacker=false):
 	
 	
 	var points_earned = point_calculations()
+	
+	round_information_dict = BASE_ROUND_INFO_DICT
+	
 	$CanvasLayer/Background/H/Left/Info/TBody/Text.text = "> Points earned : " + str(points_earned) + "\n"
 	$CanvasLayer/Background/H/Left/Info/TBody/Text.text += "> Total points earned : " + str(total_points_accumualted)
 	$CanvasLayer/Background/H/Middle/TCPUDP.visible = false
@@ -371,13 +398,22 @@ func ending_round(hacker=false):
 	$StartingConnections._sending_points(points_earned)
 	
 	var timer = Timer.new()
-	timer.set_wait_time(5)
+	timer.set_wait_time(2.5)
 	timer.set_one_shot(true)
 	self.add_child(timer)
 	timer.start()
 	yield(timer, "timeout")
+
+	$CanvasLayer/ALERT.visible = true
+	$CanvasLayer/ALERT/textbcknd/Label.text = "WAITING FOR A NEW PACKET..."
+	timer.start()
+	yield(timer, "timeout")
+	
 	timer.queue_free()
+	round_information_dict = BASE_ROUND_INFO_DICT
 	is_a_round_happening = false
+	
+
 	
 
 
@@ -408,55 +444,35 @@ func _on_ProgressUp_timeout():
 	$CanvasLayer/Background/H/Right/CR/ProgressBar.value += 1
 	
 	if $CanvasLayer/Background/H/Right/CR/ProgressBar.max_value == $CanvasLayer/Background/H/Right/CR/ProgressBar.value:
+		round_information_dict["Lost"] = "true"
 		ending_round()
 		change_packet_info_text("Took too long. Packet was lost")
 	
 
 func point_calculations():
-			#first check if it was successfully sent
-			#True
-				#Was is the correct choice?
-				#true
-					#1 point earned!
-				#false
-					#1 point lost!
-				#Was it sent with UDP or TCP?
-				#TCP
-					#multiple points by 5 (+/-5)
-				#UDP
-					#multiple points by 1 (+/-1)
-					
-#	round_information_dict = {
-#	"Valid IP" : "", #was the packet valid or not?
-#	"Deny" : "false", #did you deny it or not
-#	"Allow" : {"TCP or UDP" : "UDP", #was it udp or tcp
-#				"Successfully sent" : "false"}, #did it successfully send
-#	"Correct choice" : "false"
-#}
-
-			#Valid IP true/false -> 0.5
-			#Denied -> 1
-			#Allow | SS False -> 0 | SS True TCP -> 3 | SS True UDP -> 1
 	var points = 0
 	var rid = round_information_dict
 	print(rid)
 	
-	if rid["Correct choice"] == "false":
-		points = -1
-	else:
-		points = 1
-		
-	if rid["Deny"] == "true":
-		points *= 2
-	else: #allow
-		if rid["Allow"]["Successfully sent"] == "false":
-			points = 0
+	if rid["Lost"] == "false":
+		if rid["Correct choice"] == "false":
+			points = -2
 		else:
-			if rid["Allow"]["TCP or UDP"] == "TCP":
-				points *= 2
-			else:
-				points *= 1
-	
+			points = 1
+			if rid["Scanned"] == "true":
+				points += 1
+			
+			if rid["Deny"] == "true":
+				points += 1
+			else: #allow
+				if rid["Allow"]["Successfully sent"] == "false":
+					points = 0
+				else:
+					if rid["Allow"]["TCP or UDP"] == "TCP":
+						points += 1
+				
+	else:
+		points = -1
 	
 	print("points")
 
