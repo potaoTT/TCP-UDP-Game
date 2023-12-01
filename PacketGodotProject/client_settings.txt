@@ -1,6 +1,7 @@
-addr:10.10.10.10
+addr:10.202.181.33
 port:9876
-user:STOPIMPERSONATING
+user:Drugs
 team:orange
 role:tcp_udp
 head:10
+

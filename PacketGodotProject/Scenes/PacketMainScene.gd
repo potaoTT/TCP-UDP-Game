@@ -151,7 +151,7 @@ func check_if_correct_valid_packet(allowed):
 	if (valid_ip_range in current_packet_info[CPI_state.DESTINATION_IP]) == false:
 		is_valid = false
 	
-	round_information_dict["Valid IP"] = str(is_valid)
+	round_information_dict["Valid IP"] = (str(is_valid)).to_lower()
 	
 	
 			#false = false, good, true = true, good, 
@@ -159,10 +159,10 @@ func check_if_correct_valid_packet(allowed):
 	
 	if is_valid == allowed:
 				#means that either a good packet was accept or a bad one was denied
-		correct_action = true
+		correct_action = "true"
 	else:
 				#means that either a good packet was denied or a bad one was accepted
-		correct_action = false
+		correct_action = "false"
 	
 			#this will earn the player some points (majority)
 	
@@ -464,7 +464,7 @@ func point_calculations():
 				points += 1
 			
 			if rid["Deny"] == "true":
-				points += 1
+				points += 0
 			else: #allow
 				if rid["Allow"]["Successfully sent"] == "false":
 					points = 0

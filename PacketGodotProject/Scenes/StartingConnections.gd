@@ -4,7 +4,7 @@ extends Node
 const PORT : int = 9876
 
 var client = WebSocketClient.new()
-var URL: String = "ws://127.0.0.1:%s" % PORT
+var URL: String = "ws://10.202.181.33:%s" % PORT
 
 var server_id
 
