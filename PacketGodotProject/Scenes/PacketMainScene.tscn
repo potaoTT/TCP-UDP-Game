@@ -379,6 +379,7 @@ wait_time = 4.0
 [node name="ProgressUp" type="Timer" parent="."]
 
 [node name="StartingConnections" type="Node" parent="."]
+pause_mode = 2
 script = ExtResource( 3 )
 
 [node name="DOSChild" type="Timer" parent="."]
@@ -386,6 +387,9 @@ pause_mode = 2
 wait_time = 10.0
 one_shot = true
 script = ExtResource( 4 )
+
+[node name="serverSecondCheck" type="Timer" parent="."]
+autostart = true
 
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Allow" to="." method="_on_Allow_pressed"]
 [connection signal="pressed" from="CanvasLayer/Background/H/Middle/Action/TBody/V/Deny" to="." method="_on_Deny_pressed"]
@@ -395,3 +399,4 @@ script = ExtResource( 4 )
 [connection signal="timeout" from="RoundCheck" to="." method="_on_RoundCheck_timeout"]
 [connection signal="timeout" from="ProgressUp" to="." method="_on_ProgressUp_timeout"]
 [connection signal="timeout" from="DOSChild" to="DOSChild" method="_on_DOSChild_timeout"]
+[connection signal="timeout" from="serverSecondCheck" to="StartingConnections" method="_on_serverSecondCheck_timeout"]

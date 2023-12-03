@@ -68,11 +68,15 @@ signal TCP_UDP_end
 
 func _ready():
 	print("start")
-	start_round()
 	$CanvasLayer/ALERT.visible = true
-	$CanvasLayer/ALERT/textbcknd/Label.text = "WAITING FOR A NEW PACKET..."
+	$CanvasLayer/ALERT/textbcknd/Label.text = "WAITING FOR THE SERVER TO START..."
+	#start_round()
+	
 
 func start_round():
+	print("start")
+	$CanvasLayer/ALERT.visible = true
+	$CanvasLayer/ALERT/textbcknd/Label.text = "WAITING FOR A NEW PACKET..."
 	$RoundCheck.start(1)
 	$RoundCheck.wait_time = 5
 	#code to check if server is online

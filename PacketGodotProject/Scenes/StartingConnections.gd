@@ -4,7 +4,7 @@ extends Node
 const PORT : int = 9876
 
 var client = WebSocketClient.new()
-var URL: String = "ws://10.202.181.33:%s" % PORT
+var URL: String = "ws://same.ip.as.connecting:%s" % PORT
 
 var server_id
 
@@ -43,10 +43,15 @@ func _extract_from_client_settings():
 				addr = split[1]
 			"head":
 				head = split[1]
+			"port":
+				port = split[1]
 	file.close()
 
 func _ready() -> void:
 	print("started")
+	
+	
+	_client_settings_locate_change()
 	_extract_from_client_settings()
 	print("connecty testy")
 	
@@ -56,7 +61,10 @@ func _ready() -> void:
 	client.connect("data_received", self, "_on_data")
 	print("we no likey testy")
 	
-	var err = client.connect_to_url(URL)
+	var better_url = "ws://%s:%s" % [addr, port]  
+	print(better_url)
+	
+	var err = client.connect_to_url(better_url)
 	
 	if err != OK:
 		print("Unable to connect")
@@ -64,7 +72,29 @@ func _ready() -> void:
 	else:
 		print("Okay!")
 	
+#either grabs client settings from within the file
+#or outside
+func _client_settings_locate_change():
+	#C:\Users\joshd\Desktop\CompSciProject\TCP-UDP-Game\PacketGodotProject
+	settings_file
 	
+	var settings_file_locate = ""
+	#means it is in godot
+	if (OS.has_feature("standalone")) == false:
+		settings_file_locate = ProjectSettings.globalize_path(settings_file)
+	else:
+		#the exe SHOULD be in the clients folder of the thingo launcher
+		#so technically, this should would cause the .exe and settings will be in the same folder
+		#if it doesn't, I will murder you cause it is meant to be working
+		#so computer, I am threatening you, work
+		var directory = OS.get_executable_path().get_base_dir()
+		
+		settings_file_locate = directory + "/client_settings.txt"
+	
+	settings_file = settings_file_locate
+	print(settings_file)
+
+
 func _closed():
 	print("closed")
 
@@ -112,11 +142,15 @@ func _on_data() -> void:
 			#create the packet but with the procol being a hacker
 			#deny the packet kicks the person off
 			pass
-		
+		"test":
+			if splitted_incomming[1] == "False":
+				get_parent().start_round()
+				get_parent().get_node("serverSecondCheck").stop()
+			
 	
 	
 func _sending_points(points):
-	var message = "score:%s" % points
+	var message = "game:add_points|%s" % points
 	
 	#first creating the packet as utf
 	#sends it off
@@ -135,7 +169,20 @@ func _intel(taking):
 	var packet: PoolByteArray = message.to_utf8()
 	client.get_peer(1).put_packet(packet)
 	
+
+
+func _sending_test():
+	var packet_to_send = "test:"
 	
+	#var contents = role_file.get_as_text()
+	#print(contents)
+	
+	packet_to_send += team + ":" + user
+	print(packet_to_send)
+	
+	client.get_peer(1).put_packet(packet_to_send.to_utf8())
 
 
+func _on_serverSecondCheck_timeout():
+	_sending_test()
 	

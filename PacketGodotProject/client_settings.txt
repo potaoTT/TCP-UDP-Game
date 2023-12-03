@@ -1,7 +1,8 @@
-addr:10.202.181.33
+addr:192.168.0.8
 port:9876
-user:Drugs
-team:orange
+user:JoshT
+team:green
 role:tcp_udp
 head:10
+
 
